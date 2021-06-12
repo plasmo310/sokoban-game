@@ -317,11 +317,11 @@ void set_map_tiles(int point_pos[2], int last_walk_pos[2], int move_count)
 int randint(int min,int max)
 {
     // 計算式；min + rand()%(max-min+1)
-    // ※シード値によりrand()が負の値になる場合がある
+    // ※シード値によりrand()が負の値になる場合があるため注意
     int random = rand()%(max-min+1);
-    if (random < min || random > max) {
+    if (random < 0) {
         random *= -1; // 符号を反転
     }
     random += min;
-	return random;
+    return random;
 }
