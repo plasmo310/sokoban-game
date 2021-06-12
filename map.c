@@ -2,17 +2,12 @@
 #include <rand.h>
 #include "tile.h"
 
-/* 移動方向 */
-const int LEFT_MOVE  = 0;
-const int RIGHT_MOVE = 1;
-const int UP_MOVE    = 2;
-const int DOWN_MOVE  = 3;
-
-/* ループ回数制限用 */
-const int MAX_LOOP_COUNT = 50;
-int loop_count = 0;
-
-/* マップ配列 (10x9) */
+/* マップ情報（10x9） */
+const int MAP_WIDTH = 10;
+const int MAP_HEIGHT = 9;
+// マップ配列
+unsigned int map[9][10];
+// 初期化用デフォルトマップ
 unsigned int default_map[9][10] = 
 {
   {1,1,1,1,1,1,1,1,1,1},
@@ -25,9 +20,7 @@ unsigned int default_map[9][10] =
   {1,0,0,0,0,0,0,0,0,1},
   {1,1,1,1,1,1,1,1,1,1},
 };
-unsigned int map[9][10];
-
-/* タイトル画面表示用 */
+// タイトル画面表示用マップ
 unsigned int title_map[18][20] = 
 {
   {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
@@ -49,8 +42,7 @@ unsigned int title_map[18][20] =
   {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
   {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
 };
-
-/* クリア文字表示用 */
+// クリア文字表示用マップ
 unsigned int clear_map[18][20] = 
 {
   {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
@@ -73,28 +65,38 @@ unsigned int clear_map[18][20] =
   {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
 };
 
+/* 移動方向 */
+const int LEFT_MOVE  = 0;
+const int RIGHT_MOVE = 1;
+const int UP_MOVE    = 2;
+const int DOWN_MOVE  = 3;
+
+/* ループ回数制限用 */
+const int MAX_LOOP_COUNT = 50;
+int loop_count = 0;
+
 /* プロトタイプ宣言 */
 void generate_map();                   // マップ配列自動生成処理
 void set_map_tiles(int[], int[], int); // マップのタイル設定処理
 int randint(int, int);                 // 乱数生成処理
 
-/* マップ配列自動生成処理 */
+/* マップ配列生成処理 */
 void generate_map()
 {
     // デフォルトのマップ情報を設定
-    for (int i = 0; i < 9; i++) { // Y方向の配列数
-        for (int j = 0; j < 10; j++) { // X方向の配列数
+    for (int i = 0; i < MAP_HEIGHT; i++) { // Y方向の配列数
+        for (int j = 0; j < MAP_WIDTH; j++) { // X方向の配列数
             map[i][j] = default_map[i][j];
         }
     }
-    // マップ生成処理
+    // マップ生成のための変数定義
     int point_pos[2] = {0, 0};     // ポイント位置
     int last_walk_pos[2] = {0, 0}; // 最後の歩行ポイント位置
-    // １つ目のポイントをランダムに決めてマップ生成
+    // １つ目のポイントをランダムに決めてマップを生成
     point_pos[0] = randint(1, 8);
     point_pos[1] = randint(1, 7);
     set_map_tiles(point_pos, last_walk_pos, 5);
-    // ２つ目のポイントを最後の歩行ポイント位置としてマップ生成
+    // ２つ目のポイントを最後の歩行ポイント位置としてマップを生成
     point_pos[0] = last_walk_pos[0];
     point_pos[1] = last_walk_pos[1];
     set_map_tiles(point_pos, last_walk_pos, 3);
@@ -102,8 +104,8 @@ void generate_map()
     map[last_walk_pos[1]][last_walk_pos[0]] = PLAYER_TILE_NO;
 
     // 生成されたマップを整形
-    for(int j = 0; j < 9; j++) { // Y方向の配列数
-        for (int i = 0; i < 10; i++) { // X方向の配列数
+    for(int j = 0; j < MAP_HEIGHT; j++) { // Y方向の配列数
+        for (int i = 0; i < MAP_WIDTH; i++) { // X方向の配列数
             if (map[j][i] == BLANK_TILE_NO) {
                 // ブランクタイルの場合、２分の１の確率でブロックタイルに設定
                 if (randint(0, 1) == 0) {
@@ -131,6 +133,7 @@ void set_map_tiles(int point_pos[2], int last_walk_pos[2], int move_count)
     int walk2_pos[] = {0, 0};    // 歩行ポイント位置２（経路用）
     int walk3_pos[] = {0, 0};    // 歩行ポイント位置３（経路用）
 
+    /* ポイント位置を基準にマップの自動生成を行う*/
     // ポイント位置を基準とする
     pre_box_pos[0] = point_pos[0];
     pre_box_pos[1] = point_pos[1];
@@ -164,7 +167,7 @@ void set_map_tiles(int point_pos[2], int last_walk_pos[2], int move_count)
         }
         // 歩行ポイント（２マス先）が置ける範囲なら置く
         // マップの範囲 かつ ブランクか歩行経路のタイル
-        if (0 < walk_pos[0] && walk_pos[0] < 9 && 0 < walk_pos[1] && walk_pos[1] < 8
+        if (0 < walk_pos[0] && walk_pos[0] < MAP_WIDTH-1 && 0 < walk_pos[1] && walk_pos[1] < MAP_HEIGHT-1
         && (map[walk_pos[1]][walk_pos[0]] == BLANK_TILE_NO || map[walk_pos[1]][walk_pos[0]] == WALK_TILE_NO)
         && (map[box_pos[1]][box_pos[0]]   == BLANK_TILE_NO || map[box_pos[1]][box_pos[0]]   == WALK_TILE_NO)) {
             // 移動した方向を保持
@@ -220,7 +223,7 @@ void set_map_tiles(int point_pos[2], int last_walk_pos[2], int move_count)
             }
             // 歩行ポイント（２マス先）が置ける範囲なら置く
             // マップの範囲 かつ ブランクか歩行経路のタイル
-            if (0 < walk_pos[0] && walk_pos[0] < 9 && 0 < walk_pos[1] && walk_pos[1] < 8
+            if (0 < walk_pos[0] && walk_pos[0] < MAP_WIDTH-1 && 0 < walk_pos[1] && walk_pos[1] < MAP_HEIGHT-1
             && (map[walk_pos[1]][walk_pos[0]] == BLANK_TILE_NO || map[walk_pos[1]][walk_pos[0]] == WALK_TILE_NO)
             && (map[box_pos[1]][box_pos[0]]   == BLANK_TILE_NO || map[box_pos[1]][box_pos[0]]   == WALK_TILE_NO)) {
                 // ボックスの移動方向が変わった場合、周囲に歩行経路を設定
@@ -269,17 +272,22 @@ void set_map_tiles(int point_pos[2], int last_walk_pos[2], int move_count)
                     walk2_pos[1] = walk_pos[1] + 1;
                     walk3_pos[1] = walk_pos[1] + 1;
                 }
-                // 上記で設定された場合、歩行経路に設定
-                // ※ブランクのタイル意外の場合、設定しない（クリアできない箇所が出てくるかも・・・？）
-                if (walk2_pos[0] != -1) {
-                    if (map[walk2_pos[1]][walk2_pos[0]] == BLANK_TILE_NO) {
-                        map[walk2_pos[1]][walk2_pos[0]] = WALK_TILE_NO;
+                // 上記で設定された場合
+                if (walk2_pos[0] != -1 && walk3_pos[0] != -1) {
+                    // ブランクタイル以外の場合、やり直し
+                    if (map[walk2_pos[1]][walk2_pos[0]] != BLANK_TILE_NO 
+                        || map[walk3_pos[1]][walk3_pos[0]] != BLANK_TILE_NO) {
+                        loop_count++;
+                        if (loop_count >= MAX_LOOP_COUNT) {
+                            last_walk_pos[0] = pre_walk_pos[0];
+                            last_walk_pos[1] = pre_walk_pos[1];
+                            return;
+                        }
+                        continue;
                     }
-                }
-                if (walk3_pos[0] != -1) {
-                    if (map[walk3_pos[1]][walk3_pos[0]] == BLANK_TILE_NO) {
-                        map[walk3_pos[1]][walk3_pos[0]] = WALK_TILE_NO;
-                    }
+                    // 歩行経路を設定
+                    map[walk2_pos[1]][walk2_pos[0]] = WALK_TILE_NO;
+                    map[walk3_pos[1]][walk3_pos[0]] = WALK_TILE_NO;
                 }
                 // 移動した方向を保持
                 pre_move_vec = move_vec;
@@ -309,10 +317,10 @@ void set_map_tiles(int point_pos[2], int last_walk_pos[2], int move_count)
 int randint(int min,int max)
 {
     // 計算式；min + rand()%(max-min+1)
-    // ※rand()が負の値の場合、符号を反転
+    // ※シード値によりrand()が負の値になる場合がある
     int random = rand()%(max-min+1);
     if (random < min || random > max) {
-        random *= -1;
+        random *= -1; // 符号を反転
     }
     random += min;
 	return random;

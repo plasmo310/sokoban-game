@@ -1,14 +1,6 @@
 #ifndef TILE_H
 #define TILE_H
 
-/* タイル番号 */
-const int BLANK_TILE_NO  = 0;
-const int BLOCK_TILE_NO  = 1;
-const int PLAYER_TILE_NO = 2;
-const int POINT_TILE_NO  = 3;
-const int BOX_TILE_NO    = 4;
-const int WALK_TILE_NO   = 9;
-
 /* BGタイル配列 */
 unsigned char tile[] =
 {
@@ -46,5 +38,38 @@ unsigned char tile[] =
   0x86,0x7A,0xB6,0x4A,0x86,0x7A,0xB6,0x4A,
   0x86,0x7A,0xFE,0x02,0xFE,0xFE,0x00,0x00
 };
+
+/* BGタイル番号配列 */
+unsigned char blank_tile[]  = { 0x00, 0x00, 0x00, 0x00 }; // ブランク（白背景）2x2
+unsigned char block_tile[]  = { 0x01, 0x01, 0x01, 0x01 }; // ブロック 2x2
+unsigned char player_tile[] = { 0x02, 0x04, 0x03, 0x05 }; // プレイヤー 2x2
+unsigned char point_tile[]  = { 0x06, 0x08, 0x07, 0x09 }; // ポイント 2x2
+unsigned char box_tile[]    = { 0x0a, 0x0c, 0x0b, 0x0d }; // ボックス 2z2
+unsigned char blank_single_tile[]  = { 0x00 }; // ブランク（白背景）1x1
+unsigned char block_single_tile[]  = { 0x01 }; // ブロック 1x1
+
+/* マップ用のタイル番号 */
+const int BLANK_TILE_NO  = 0; // ブランク（白背景）
+const int BLOCK_TILE_NO  = 1; // ブロック
+const int PLAYER_TILE_NO = 2; // プレイヤー
+const int POINT_TILE_NO  = 3; // ポイント
+const int BOX_TILE_NO    = 4; // ボックス
+const int WALK_TILE_NO   = 9; // 歩行ポイント（自動生成用）
+
+/* BGタイル番号配列取得処理 */
+char* get_tile(int index)
+{
+  if (index == BLOCK_TILE_NO) {         // 1: ブロック
+    return block_tile;
+  } else if (index == PLAYER_TILE_NO) { // 2: プレイヤー 
+    return player_tile;
+  } else if (index == POINT_TILE_NO) {  // 3: ポイント
+    return point_tile;
+  } else if (index == BOX_TILE_NO) {    // 4: ボックス
+    return box_tile;
+  } else {                              // その他: ブランク（白背景）
+    return blank_tile;
+  }
+}
 
 #endif // TILE_H
