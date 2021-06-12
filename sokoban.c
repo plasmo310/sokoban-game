@@ -1,28 +1,16 @@
 #include <gb/gb.h>
 #include <string.h>
-#include "tile.c"
+#include "tile.h"
+#include "map.c"
 
 /* BGタイル番号配列 */
-unsigned char blank_tile[]  = { 0x00, 0x00, 0x00, 0x00 };
-unsigned char block_tile[]  = { 0x01, 0x01, 0x01, 0x01 };
-unsigned char player_tile[] = { 0x02, 0x04, 0x03, 0x05 };
-unsigned char point_tile[]  = { 0x06, 0x08, 0x07, 0x09 };
-unsigned char box_tile[]    = { 0x0a, 0x0c, 0x0b, 0x0d };
-unsigned char blank_single_tile[]  = { 0x00 };
-unsigned char block_single_tile[]  = { 0x01 };
-const int BLANK_TILE_NO  = 0;
-const int BLOCK_TILE_NO  = 1;
-const int PLAYER_TILE_NO = 2;
-const int POINT_TILE_NO  = 3;
-const int BOX_TILE_NO    = 4;
-
-/* プロトタイプ宣言 */
-void game_start();   // ゲーム開始処理
-void init();         // ゲーム初期化処理
-void update();       // ゲーム更新処理
-void clear();        // ゲームクリア処理
-void generate_map(); // マップ配列生成処理
-char* get_tile(int); // BGタイル番号配列取得処理
+unsigned char blank_tile[]  = { 0x00, 0x00, 0x00, 0x00 }; // ブランク（白背景）2x2
+unsigned char block_tile[]  = { 0x01, 0x01, 0x01, 0x01 }; // ブロック 2x2
+unsigned char player_tile[] = { 0x02, 0x04, 0x03, 0x05 }; // プレイヤー 2x2
+unsigned char point_tile[]  = { 0x06, 0x08, 0x07, 0x09 }; // ポイント 2x2
+unsigned char box_tile[]    = { 0x0a, 0x0c, 0x0b, 0x0d }; // ボックス 2z2
+unsigned char blank_single_tile[]  = { 0x00 }; // ブランク（白背景）1x1
+unsigned char block_single_tile[]  = { 0x01 }; // ブロック 1x1
 
 /* 変数定義 */
 // プレイヤー
@@ -33,51 +21,27 @@ typedef struct
 } Player;
 Player player;
 
-// マップ配列 (10x9)
-unsigned int default_map[9][10] = 
-{
-  {1,1,1,1,1,1,1,1,1,1},
-  {1,0,0,0,0,0,0,0,0,1},
-  {1,0,0,0,0,0,0,0,0,1},
-  {1,0,0,0,0,0,0,0,0,1},
-  {1,0,0,0,0,0,0,0,0,1},
-  {1,0,0,0,0,0,0,0,0,1},
-  {1,0,0,0,0,0,3,0,0,1},
-  {1,0,0,0,0,0,0,0,0,1},
-  {1,1,1,1,1,1,1,1,1,1},
-};
-unsigned int map[9][10];
-
-// クリア文字表示用
-unsigned int clear_map[18][20] = 
-{
-  {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
-  {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
-  {1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1},
-  {1,1,0,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,1,1},
-  {1,1,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,1,1},
-  {1,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1,1},
-  {1,1,0,0,1,0,0,1,0,0,1,0,0,0,0,0,0,0,1,1},
-  {1,1,0,1,0,0,0,1,0,0,1,0,0,0,0,0,0,0,1,1},
-  {1,1,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0,1,1},
-  {1,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,1,1},
-  {1,1,0,0,0,0,0,1,1,1,0,0,1,1,1,1,1,0,1,1},
-  {1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1,1},
-  {1,1,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1,1},
-  {1,1,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1,1},
-  {1,1,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,1,1},
-  {1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1},
-  {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
-  {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
-};
-
 // ボタン押下情報
 char button;
 char pre_button;
 
+/* プロトタイプ宣言 */
+void game_start();   // ゲーム開始処理
+void init();         // ゲーム初期化処理
+void update();       // ゲーム更新処理
+void disp_title();   // ゲームタイトル画面表示
+void disp_clear();   // ゲームクリア画面表示
+char* get_tile(int); // BGタイル番号配列取得処理
+
 /* メイン処理 */
 void main(void)
 {
+  // 初期処理
+  SHOW_BKG; // 背景の有効化
+  set_bkg_data(0, sizeof(tile)/16, tile); // BGタイルの設定
+  // タイトル画面の表示
+  disp_title();
+  // ゲームスタート
   game_start();
 }
 
@@ -91,12 +55,9 @@ void game_start()
 /* ゲーム初期化処理 */
 void init()
 {
-  // 背景を有効化
-  SHOW_BKG;
-  // タイルの設定(個数は配列要素数/16)
-  set_bkg_data(0, sizeof(tile)/16, tile);
   // マップ配列生成
   generate_map();
+  
   // マップの描画
   unsigned char *map_tile = NULL;
   for (int y = 0; y < 9; y++) {
@@ -223,13 +184,53 @@ void update()
   }
   // クリア処理
   if (is_clear == 1) {
-    clear();
+    disp_clear();
     return;
   }
 }
 
-/* ゲームクリア処理 */
-void clear()
+/* タイトル画面表示 */
+void disp_title()
+{
+  // タイトル画面の表示
+  for (int y = 0; y < 18; y++) {
+    for (int x = 0; x < 20; x++) {
+      if (title_map[y][x] == BLOCK_TILE_NO) {
+        set_bkg_tiles(x, y, 1, 1, block_single_tile);
+      } else {
+        set_bkg_tiles(x, y, 1, 1, blank_single_tile);
+      }
+    }
+  }
+
+  // 乱数シードを保持
+  UWORD seed = DIV_REG;
+
+  // ボタンの入力検知
+  button = joypad();
+  pre_button = button;
+  while (1) { 
+    button = joypad();
+    if (pre_button != button) {
+      // スタートボタン押下で次処理へ
+      if (button & J_START) {
+        break;
+      }
+    }
+    pre_button = button;
+  }
+
+  // 乱数初期化
+  // ※ボタン押下までの時間でランダムに調整
+  seed |= (UWORD)DIV_REG << 8;
+  initrand(seed);
+
+  // ゲームスタート
+  game_start();
+}
+
+/* ゲームクリア画面表示 */
+void disp_clear()
 {
   // クリア文字の表示
   for (int y = 0; y < 18; y++) {
@@ -247,42 +248,15 @@ void clear()
   while (1) { 
     button = joypad();
     if (pre_button != button) {
-      // スタートボタンが押されたらリトライ
+      // スタートボタン押下で次処理へ
       if (button & J_START) {
         break;
       }
     }
     pre_button = button;
   }
-  // リトライ処理
+  // ゲーム再スタート
   game_start();
-}
-
-/* マップ配列生成処理 */
-void generate_map()
-{
-  // デフォルトのマップ情報を設定
-  for (int y = 0; y < 9; y++) {
-    for (int x = 0; x < 10; x++) {
-      map[y][x] = default_map[y][x];
-    }
-  }
-  // TODO：自動生成してみたいクマ
-  // 個別のオブジェクトを設定
-  map[1][4] = BLOCK_TILE_NO;
-  map[2][4] = BLOCK_TILE_NO;
-  map[3][4] = BLOCK_TILE_NO;
-  map[4][8] = BLOCK_TILE_NO;
-  map[5][6] = BLOCK_TILE_NO;
-  map[5][7] = BLOCK_TILE_NO;
-  map[5][8] = BLOCK_TILE_NO;
-  map[7][1] = BLOCK_TILE_NO;
-  map[7][6] = BLOCK_TILE_NO;
-  map[5][2] = PLAYER_TILE_NO;
-  map[5][4] = BOX_TILE_NO;
-  map[3][6] = BOX_TILE_NO;
-  map[2][7] = POINT_TILE_NO;
-  map[6][6] = POINT_TILE_NO;
 }
 
 /* BGタイル番号配列取得処理 */

@@ -68,27 +68,38 @@ Area                       Addr        Size        Decimal Bytes (Attributes)
         -----  ------            -----  ------            -----  ------    
      00000002  l__HEADER |    00000002  l__HEADER |    00000003  l__HEADER
      00000003  l__HRAM11 |    00000005  l__HEADER |    00000006  l__HEADER
-     00000007  l__HEADER |    00000008  l__HEADER |    00000018  l__BSS   
+     00000007  l__HEADER |    00000008  l__HEADER |    0000001A  l__BSS   
      0000002C  l__HEADER |    00000033  l__HEADER |    0000006A  l__HOME  
-     00000083  l__HEADER |    000000E4  l__BASE   |    00000200  s__CODE  
-     00000534  l__DATA   |    00000D4A  l__CODE   |    00000F4A  s__HOME  
-     00000FB4  s__BASE   |    00001098  s__CODE_0 |    00001098  s__GSINIT
-     00001098  s__LIT    |    000010EA  l__GSINIT |    00002182  s__GSFINA
-     0000C000  _shadow_O |    0000C0A0  s__DATA   |    0000C5D4  s__BSS   
-     0000C5EC  s__HEAP   |    0000E000  .STACK    |    0000FF80  .refresh_
+     00000083  l__HEADER |    000000EF  l__BASE   |    00000200  s__CODE  
+     00000806  l__DATA   |    00001AB2  l__GSINIT |    00001F2E  l__CODE  
+     0000212E  s__HOME   |    00002198  s__BASE   |    00002287  s__CODE_0
+     00002287  s__GSINIT |    00002287  s__LIT    |    00003D39  s__GSFINA
+     0000C000  _shadow_O |    0000C0A0  s__DATA   |    0000C8A6  s__BSS   
+     0000C8C0  s__HEAP   |    0000E000  .STACK    |    0000FF80  .refresh_
 ASxxxx Linker V03.00 + NoICE + sdld,  page 3.
 Hexadecimal  [32-Bits]
 
 Area                       Addr        Size        Decimal Bytes (Attributes)
 --------------------       ----        ----        ------- ----- ------------
-_CODE                  00000200    00000D4A =        3402. bytes (REL,CON)
+_CODE                  00000200    00001F2E =        7982. bytes (REL,CON)
 
         Value  Global            Value  Global            Value  Global    
         -----  ------            -----  ------            -----  ------    
-     00000200  _main     |    00000203  _BLANK_TI |    00000205  _BLOCK_TI
-     00000207  _PLAYER_T |    00000209  _POINT_TI |    0000020B  _BOX_TILE
-     0000020D  _game_sta |    00000213  _init     |    0000030B  _update  
-     00000CDB  _clear    |    00000DCC  _generate |    00000EEE  _get_tile
+     00000200  _generate |    000004A8  _BLANK_TI |    000004AA  _BLOCK_TI
+     000004AC  _PLAYER_T |    000004AE  _POINT_TI |    000004B0  _BOX_TILE
+     000004B2  _WALK_TIL |    000004B4  _LEFT_MOV |    000004B6  _RIGHT_MO
+     000004B8  _UP_MOVE  |    000004BA  _DOWN_MOV |    000004BC  _MAX_LOOP
+     000004BE  _set_map_ |    0000124D  _randint  |    000012B5  _main    
+     000012D1  _game_sta |    000012D7  _init     |    000013B9  _update  
+     00001D89  _disp_tit |    00001E8F  _disp_cle |    00001F80  _get_tile
+     00001FDC  _rand     |    00001FDC  _randw    |    00002007  __divsuch
+     00002014  __modsuch |    0000201E  __divusch |    00002030  __modusch
+     00002040  __divscha |    0000204C  __modscha |    00002056  __divsint
+     00002067  __modsint |    00002076  __divucha |    00002082  __moducha
+     0000208C  __divuint |    0000209D  __moduint |    000020AC  .div8    
+     000020AC  .mod8     |    000020B4  .div16    |    000020B4  .mod16   
+     000020EA  .divu8    |    000020EA  .modu8    |    000020ED  .divu16  
+     000020ED  .modu16  
 ASxxxx Linker V03.00 + NoICE + sdld,  page 4.
 Hexadecimal  [32-Bits]
 
@@ -254,44 +265,44 @@ Hexadecimal  [32-Bits]
 
 Area                       Addr        Size        Decimal Bytes (Attributes)
 --------------------       ----        ----        ------- ----- ------------
-_HOME                  00000F4A    0000006A =         106. bytes (REL,CON)
+_HOME                  0000212E    0000006A =         106. bytes (REL,CON)
 
         Value  Global            Value  Global            Value  Global    
         -----  ------            -----  ------            -----  ------    
-     00000F4A  .remove_V |    00000F4D  .remove_i |    00000F6A  .add_VBL 
-     00000F6D  .add_int  |    00000F78  .wait_vbl |    00000F78  _wait_vbl
-     00000F87  .display_ |    00000F87  _display_ |    00000F9E  _remove_V
-     00000FA9  _add_VBL 
+     0000212E  .remove_V |    00002131  .remove_i |    0000214E  .add_VBL 
+     00002151  .add_int  |    0000215C  .wait_vbl |    0000215C  _wait_vbl
+     0000216B  .display_ |    0000216B  _display_ |    00002182  _remove_V
+     0000218D  _add_VBL 
 ASxxxx Linker V03.00 + NoICE + sdld,  page 22.
 Hexadecimal  [32-Bits]
 
 Area                       Addr        Size        Decimal Bytes (Attributes)
 --------------------       ----        ----        ------- ----- ------------
-_BASE                  00000FB4    000000E4 =         228. bytes (REL,CON)
+_BASE                  00002198    000000EF =         239. bytes (REL,CON)
 
         Value  Global            Value  Global            Value  Global    
         -----  ------            -----  ------            -----  ------    
-     00000FB4  .padup    |    00000FB4  _waitpadu |    00000FC4  .jpad    
-     00000FC4  _joypad   |    00000FEC  _waitpad  |    00000FEF  .wait_pad
-     00000FF6  _set_bkg_ |    00000FF6  _set_win_ |    00000FFE  _set_spri
-     0000102E  _set_bkg_ |    00001042  .set_xy_w |    0000104B  .set_xy_b
-     0000105A  .set_xy_t
+     00002198  _initrand |    0000219A  .initrand |    000021A3  .padup   
+     000021A3  _waitpadu |    000021B3  .jpad     |    000021B3  _joypad  
+     000021DB  _waitpad  |    000021DE  .wait_pad |    000021E5  _set_bkg_
+     000021E5  _set_win_ |    000021ED  _set_spri |    0000221D  _set_bkg_
+     00002231  .set_xy_w |    0000223A  .set_xy_b |    00002249  .set_xy_t
 ASxxxx Linker V03.00 + NoICE + sdld,  page 23.
 Hexadecimal  [32-Bits]
 
 Area                       Addr        Size        Decimal Bytes (Attributes)
 --------------------       ----        ----        ------- ----- ------------
-_GSINIT                00001098    000010EA =        4330. bytes (REL,CON)
+_GSINIT                00002287    00001AB2 =        6834. bytes (REL,CON)
 
         Value  Global            Value  Global            Value  Global    
         -----  ------            -----  ------            -----  ------    
-     00001098  gsinit   
+     00002287  gsinit   
 ASxxxx Linker V03.00 + NoICE + sdld,  page 24.
 Hexadecimal  [32-Bits]
 
 Area                       Addr        Size        Decimal Bytes (Attributes)
 --------------------       ----        ----        ------- ----- ------------
-_GSFINAL               00002182    00000001 =           1. bytes (REL,CON)
+_GSFINAL               00003D39    00000001 =           1. bytes (REL,CON)
 
         Value  Global            Value  Global            Value  Global    
         -----  ------            -----  ------            -----  ------    
@@ -300,26 +311,28 @@ Hexadecimal  [32-Bits]
 
 Area                       Addr        Size        Decimal Bytes (Attributes)
 --------------------       ----        ----        ------- ----- ------------
-_DATA                  0000C0A0    00000534 =        1332. bytes (REL,CON)
+_DATA                  0000C0A0    00000806 =        2054. bytes (REL,CON)
 
         Value  Global            Value  Global            Value  Global    
         -----  ------            -----  ------            -----  ------    
-     0000C0A0  _tile     |    0000C180  _blank_ti |    0000C184  _block_ti
-     0000C188  _player_t |    0000C18C  _point_ti |    0000C190  _box_tile
-     0000C194  _blank_si |    0000C195  _block_si |    0000C196  _player  
-     0000C19A  _default_ |    0000C24E  _map      |    0000C302  _clear_ma
-     0000C5D2  _button   |    0000C5D3  _pre_butt
+     0000C0A0  _tile     |    0000C180  _loop_cou |    0000C182  _default_
+     0000C236  _map      |    0000C2EA  _title_ma |    0000C5BA  _clear_ma
+     0000C88A  _blank_ti |    0000C88E  _block_ti |    0000C892  _player_t
+     0000C896  _point_ti |    0000C89A  _box_tile |    0000C89E  _blank_si
+     0000C89F  _block_si |    0000C8A0  _player   |    0000C8A4  _button  
+     0000C8A5  _pre_butt
 ASxxxx Linker V03.00 + NoICE + sdld,  page 26.
 Hexadecimal  [32-Bits]
 
 Area                       Addr        Size        Decimal Bytes (Attributes)
 --------------------       ----        ----        ------- ----- ------------
-_BSS                   0000C5D4    00000018 =          24. bytes (REL,CON)
+_BSS                   0000C8A6    0000001A =          26. bytes (REL,CON)
 
         Value  Global            Value  Global            Value  Global    
         -----  ------            -----  ------            -----  ------    
-     0000C5D4  __cpu     |    0000C5D5  .mode     |    0000C5D6  .sys_time
-     0000C5D6  _sys_time |    0000C5D8  .int_0x40
+     0000C8A6  __cpu     |    0000C8A7  .mode     |    0000C8A8  .sys_time
+     0000C8A8  _sys_time |    0000C8AA  .int_0x40 |    0000C8BE  .randhi  
+     0000C8BF  .randlo  
 ASxxxx Linker V03.00 + NoICE + sdld,  page 27.
 Hexadecimal  [32-Bits]
 
@@ -886,18 +899,22 @@ Files Linked                              [ module(s) ]
 
 /Users/molegoro/workspace/GBDKProjects/gbdk/lib/small/asxxxx/gb/crt0.o
                                           [ Runtime ]
-/var/folders/d1/f3ykbxpj38nbchtk0rm6px9h0000gn/T/lcc65130.o
+/var/folders/d1/f3ykbxpj38nbchtk0rm6px9h0000gn/T/lcc372370.o
                                           [ sokoban ]
 
 
 Libraries Linked                          [ object file ]
 
 /Users/molegoro/workspace/GBDKProjects/gbdk/lib/small/asxxxx/gb/gb.lib
+                                          [ rand.o ]
+/Users/molegoro/workspace/GBDKProjects/gbdk/lib/small/asxxxx/gb/gb.lib
                                           [ pad.o ]
 /Users/molegoro/workspace/GBDKProjects/gbdk/lib/small/asxxxx/gb/gb.lib
                                           [ sfr.o ]
 /Users/molegoro/workspace/GBDKProjects/gbdk/lib/small/asxxxx/gb/gb.lib
                                           [ set_data.o ]
+/Users/molegoro/workspace/GBDKProjects/gbdk/lib/small/asxxxx/gbz80/gbz80.lib
+                                          [ div.o ]
 /Users/molegoro/workspace/GBDKProjects/gbdk/lib/small/asxxxx/gb/gb.lib
                                           [ set_bk_t.o ]
 /Users/molegoro/workspace/GBDKProjects/gbdk/lib/small/asxxxx/gb/gb.lib
