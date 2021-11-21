@@ -22,10 +22,7 @@ GBDKで作った倉庫番のサンプルゲームです。
 ├── sokoban.map|-
 ├── sokoban.noi|-
 └── `tile.h`|src: タイル関連処理
-
-<br>
-P.S.
 <br>
 <br>
 [スクリーンショット]<br>
-![gb_sample](https://user-images.githubusercontent.com/77447256/142758185-b39066ce-87c4-482a-a864-1e1de1c4160c.png)
+![gb_sample](https://user-images.githubusercontent.com/77447256/142758196-3ad6b724-bd0f-4a2a-b4c5-8b57cc36ecea.png)
