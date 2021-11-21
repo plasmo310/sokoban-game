@@ -25,4 +25,5 @@ GBDKで作った倉庫番のサンプルゲームです。
 <br>
 <br>
 [スクリーンショット]<br>
-![gb_sample](https://user-images.githubusercontent.com/77447256/142758196-3ad6b724-bd0f-4a2a-b4c5-8b57cc36ecea.png)
+![gb_sample](https://user-images.githubusercontent.com/77447256/142758236-040e5531-755e-4d9a-a9ff-65be5f3fdcfd.png)
+<br>
