@@ -26,4 +26,6 @@ GBDKで作った倉庫番のサンプルゲームです。
 <br>
 P.S.
 <br>
-C言語を綺麗に書くの難しい・・・。
+<br>
+[スクリーンショット]<br>
+![gb_sample](https://user-images.githubusercontent.com/77447256/142758185-b39066ce-87c4-482a-a864-1e1de1c4160c.png)
